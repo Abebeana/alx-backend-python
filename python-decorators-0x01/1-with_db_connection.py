@@ -40,13 +40,13 @@ def get_user_by_id(conn, user_id):
     cursor = conn.cursor()
     
     # Use a parameterized query to prevent SQL injection
-    cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+    cursor.execute("SELECT * FROM users WHERE user_id = ?", (user_id,))
     
     return cursor.fetchone()
 
 if __name__ == "__main__":
     # Example usage: Fetch user with ID 2
-    user = get_user_by_id(2)
+    user = get_user_by_id(1)
     
     if user:
         print("User found:", user)
