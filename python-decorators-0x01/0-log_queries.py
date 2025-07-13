@@ -55,10 +55,30 @@ def fetch_all_users(query):
 # Manual test block
 # --------------------------------------------------------------------------- #
 if __name__ == "__main__":
-    # Create table and insert a couple of rows
-    fetch_all_users("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)")
-    fetch_all_users("INSERT INTO users (name) VALUES ('Alice')")
-    fetch_all_users("INSERT INTO users (name) VALUES ('Bob')")
+    # Create simplified users table
+    fetch_all_users("""
+    CREATE TABLE IF NOT EXISTS users (
+        user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        first_name TEXT NOT NULL,
+        last_name TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL,
+        phone_number TEXT,
+        role TEXT NOT NULL CHECK (role IN ('guest', 'host', 'admin')),
+        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    )
+    """)
+
+    # Insert sample users
+    fetch_all_users("""
+    INSERT INTO users (first_name, last_name, email, password_hash, phone_number, role)
+    VALUES ('Alice', 'Doe', 'alice@example.com', 'hashed_pw_123', '1234567890', 'guest')
+    """)
+
+    fetch_all_users("""
+    INSERT INTO users (first_name, last_name, email, password_hash, phone_number, role)
+    VALUES ('Bob', 'Smith', 'bob@example.com', 'hashed_pw_abc', '0987654321', 'host')
+    """)
 
     # Fetch and print all users
     for row in fetch_all_users("SELECT * FROM users"):
